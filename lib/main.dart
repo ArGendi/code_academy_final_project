@@ -1,4 +1,5 @@
 import 'package:code_academy_auth/controllers/home/home_cubit.dart';
+import 'package:code_academy_auth/controllers/resturants/resturants_cubit.dart';
 import 'package:code_academy_auth/controllers/user/user_cubit.dart';
 import 'package:code_academy_auth/local/cache.dart';
 import 'package:code_academy_auth/screens/home/home_screen.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (context)=> UserCubit()),
         BlocProvider(create: (context)=> HomeCubit()),
+        BlocProvider(create: (context)=> ResturantsCubit()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

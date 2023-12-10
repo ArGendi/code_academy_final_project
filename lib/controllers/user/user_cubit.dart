@@ -24,9 +24,9 @@ class UserCubit extends Cubit<UserState> {
     if(valid){
       registerKey.currentState!.save();
       emit(LoadingState());
-      String? token = await webServices.register(user.toJsonForRegister());
-      if(token != null){
-        await Cache.saveToken(token);
+      Map<String, dynamic>? responseJson = await webServices.post(registerUrl ,user.toJsonForRegister());
+      if(responseJson != null){
+        await saveUserDataInCache('data',responseJson);
         emit(SuccessState());
         Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context) => HomeScreen())));
       }
@@ -44,12 +44,9 @@ class UserCubit extends Cubit<UserState> {
     if(valid){
       loginKey.currentState!.save();
       emit(LoadingState());
-      Map<String, dynamic>? responseJson = await webServices.login(user.toJsonForLogin());
+      Map<String, dynamic>? responseJson = await webServices.post(loginUrl,user.toJsonForLogin());
       if(responseJson != null){
-        await Cache.saveId(responseJson['user']['id']);
-        await Cache.saveKey(nameKey, responseJson['user']['name']);
-        await Cache.saveKey(emailKey, responseJson['user']['email']);
-        await Cache.saveToken(responseJson['token']);
+        await saveUserDataInCache('user', responseJson);
         emit(SuccessState());
         Navigator.pushReplacement(context, MaterialPageRoute(builder: ((context) => HomeScreen())));
       }
@@ -65,5 +62,12 @@ class UserCubit extends Cubit<UserState> {
   void logout(BuildContext context) async{
     await Cache.removeCache();
     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => LoginScreen()), (route) => false);
+  }
+
+  Future<void> saveUserDataInCache(String key, Map responseJson) async{
+    await Cache.saveId(responseJson[key]['id']);
+    await Cache.saveKey(nameKey, responseJson[key]['name']);
+    await Cache.saveKey(emailKey, responseJson[key]['email']);
+    await Cache.saveToken(responseJson['token']);
   }
 }

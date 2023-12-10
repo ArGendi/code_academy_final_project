@@ -1,5 +1,6 @@
 import 'package:code_academy_auth/constants.dart';
 import 'package:code_academy_auth/controllers/home/home_cubit.dart';
+import 'package:code_academy_auth/controllers/resturants/resturants_cubit.dart';
 import 'package:code_academy_auth/controllers/user/user_cubit.dart';
 import 'package:code_academy_auth/local/cache.dart';
 import 'package:code_academy_auth/screens/home/bodies/home_body.dart';
@@ -21,6 +22,13 @@ class _HomeScreenState extends State<HomeScreen> {
     SettingsBody(),
     ProfileBody(),
   ];
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //BlocProvider.of<ResturantsCubit>(context).getAllResturnats();
+  }
 
   @override
   Widget build(BuildContext context) {
